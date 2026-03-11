@@ -1,6 +1,23 @@
 import random
 import time
 
+
+def slow_text(text):
+
+    for letter in str(text):
+        print(letter,end = '',flush= True)
+
+        if letter in (",",".","!",":","?"):
+            time.sleep(0.1)
+
+        else: time.sleep(0.03)
+
+
+
+
+
+
+
 class Player:
     def __init__(self, name, health,inv):
         self.name = name
@@ -52,20 +69,6 @@ class Item:
         self.name = name
         self.value = value
 
-
-
-def slow_text(text):
-
-    for letter in str(text):
-        print(letter,end = '',flush= True)
-
-        if letter in (",",".","!",":","?"):
-            time.sleep(0.1)
-
-        else: time.sleep(0.03)
-
-
-
 all_weapons = []
 
 weapon_data = [
@@ -88,16 +91,5 @@ for i in weapon_data:
 
 def main():
     print("Welcome to the game of something hopefully cool")
-
-
-
-
-
-current_weapon = all_weapons[random.randint(0,len(all_weapons)-1)]
-
-print(current_weapon)
-
-current_weapon.pick_up()
-
 
 main()
