@@ -7,6 +7,9 @@ def battle(do_you_shoot_first):
 
 def encounter(name):
 
+    #picks a random message and a random name for the encounter.
+    #example output:
+    #You see a Bastard in an alley way
 
     random_names = ("Bandit", "Bastard", "Robber", "Thug", "Brute", "Foe", "Savage")
 
@@ -14,8 +17,21 @@ def encounter(name):
     if not name:
         name = random.choice(random_names)
 
-    slow_text(f"You see a {name} hanging around")
+    random_text = (
 
+        f"You see a {name} in an alley way",
+        f"You spot a {name} hanging around",
+        f"You see the head  of a {name} poking out of a bush",
+        f"A {name} looks at you for a little to long",
+        f"You notice a {name} mugging someone",
+        f"You see a {name} looking for trouble",
+    )
+
+    text = random.choice(random_text)
+    slow_text(random_text)
+
+    #Lets you choose wether to fight or sneak past,
+    # but  if you sneak past there's a chance of you getting caught and then the enemy gets to shoot first
 
     while True:
 
@@ -33,6 +49,8 @@ def encounter(name):
         else:
             print("You must pick a valid option")
 
+
+    #Just sends you to the battle function depending on what you pressed, and also makes the chance of getting caught
 
     if choice == "1":
 
@@ -55,6 +73,9 @@ def encounter(name):
 
 def slow_text(text):
 
+    #Just makes the text come out a bit slower, and makes it so punctuation has a little more delay
+
+
     for letter in str(text):
         print(letter,end = '',flush= True)
 
@@ -70,6 +91,7 @@ def slow_text(text):
 
 
 
+#Makes the player class, so its easy to interact with the player.
 
 class Player:
     def __init__(self, name, health,inv):
@@ -78,9 +100,11 @@ class Player:
         self.inv = inv
 
 
+#Allows heaps of weapons to be made cleanly.
 class Weapon:
 
 
+    #Makes a random pickup verb so its different each time
     pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
     def __init__(self, name,damage,clip_cap,accuracy,fire_rate,bullet,value,pickup_message):
@@ -101,11 +125,17 @@ class Weapon:
 
     def pick_up(self):
 
+        #Makes the random pickup thing.
+        #example output:
+        #You lift the AK-47. Chambered in 7.62 blah blah blah
+
         verb = random.choice(self.pick_up_verbs)
 
 
         slow_text(self.pickup_message.format(verb= verb))
 
+#A class for the enemy.
+#I might not end up using it
 
 class Enemy:
     def __init__(self,name,health,weapon):
@@ -116,6 +146,7 @@ class Enemy:
     def attack(self):
         pass
 
+#A class for items, which can be randomly picked up at points and can be sold for money.
 
 class Item:
     def __init__(self,name,value):
@@ -123,10 +154,15 @@ class Item:
         self.value = value
 
 
+#Makes the player with the player class
 player = Player("Player",1000,[])
 
 
+
 all_weapons = []
+
+#Sets up all the weapons, each one has a name, damage and so on.
+#The {verb} in the pick up message gets replaced randomly inside the class each time guns are picked up
 
 weapon_data = [
 
@@ -139,6 +175,8 @@ weapon_data = [
 
 
 ]
+
+#Simple adds all the guns as classes to a list
 
 for i in weapon_data:
 
