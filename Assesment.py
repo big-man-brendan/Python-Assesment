@@ -100,7 +100,7 @@ class Player:
         self.inv = inv
 
 
-#Allows heaps of weapons to be made cleanly.
+#Allows a lot of weapons to be made cleanly.
 class Weapon:
 
 
