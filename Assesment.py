@@ -43,7 +43,7 @@ def battle(do_you_shoot_first,name):
         print(f"You are now on {player.health} health")
 
 
-    print("Somebody fucking died")
+    print("Somebody died")
 
 def encounter(name):
 
