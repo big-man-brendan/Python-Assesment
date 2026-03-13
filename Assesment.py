@@ -2,8 +2,48 @@ import random
 import time
 
 
-def battle(do_you_shoot_first):
-    pass
+
+def battle(do_you_shoot_first,name):
+
+    enemy = Enemy(name,random.randint(600,1400),[all_weapons[0]])
+
+
+    while player.health>0 and enemy.health > 0:
+
+        print("What weapon do you want to use:")
+
+
+        print("1: ",player.inv[0].name)
+
+
+
+
+        choice = int(input("> "))
+
+        #if choice == 1:
+
+        damage, bullets = player.inv[0].shoot()
+
+        enemy.health -= damage
+
+        print(f"You shot {bullets} rounds for a total of {damage} damage")
+
+
+        print(f"The {enemy.name} now has {enemy.health} health remaining")
+
+
+        op_weapon = random.choice(enemy.weapons)
+
+        damage, bullets = op_weapon.shoot()
+
+        player.health -= damage
+
+
+        print(f"The {enemy.name} shot {bullets} into you for a total of {damage} damage")
+        print(f"You are now on {player.health} health")
+
+
+    print("Somebody fucking died")
 
 def encounter(name):
 
@@ -61,11 +101,11 @@ def encounter(name):
         else:
             print(f"The {name} caught you!!!")
 
-            battle(False)
+            battle(False,name)
 
     if choice == "2":
 
-        battle(True)
+        battle(True,name)
 
 
 
@@ -121,7 +161,17 @@ class Weapon:
 
 
     def shoot(self):
-        pass
+
+        #Calculate how much damage is done per turn.
+        #and add a bit of random variation so you might get slighty diffrent damage and stuff each time
+        variation = random.uniform(0.8, 1.2)
+        bullets = round((self.fire_rate/60)*variation)
+
+        variation = random.uniform(0.9, 1.1)
+        total_damage = round(variation * bullets * self.damage)
+
+        return total_damage,bullets
+
 
     def pick_up(self):
 
@@ -138,10 +188,10 @@ class Weapon:
 #I might not end up using it
 
 class Enemy:
-    def __init__(self,name,health,weapon):
+    def __init__(self,name,health,weapons):
         self.name = name
         self.health = health
-        self.weapon = weapon
+        self.weapons = weapons
 
     def attack(self):
         pass
@@ -187,5 +237,9 @@ for i in weapon_data:
 def main():
     print("Welcome to the game of something hopefully cool")
 
+
+player.inv.append(all_weapons[0])
+
+battle(True,"Bastard")
 
 main()
