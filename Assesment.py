@@ -3,44 +3,78 @@ import time
 
 
 
+
 def battle(do_you_shoot_first,name):
 
+
+    #Sets the enemy for ease of use. will change to be random based on things later
     enemy = Enemy(name,random.randint(600,1400),[all_weapons[0]])
 
 
+    #just loop intull someone dies
     while player.health>0 and enemy.health > 0:
 
-        print("What weapon do you want to use:")
+        #only runs the first time if you can shoot first
+        if do_you_shoot_first:
 
 
-        print("1: ",player.inv[0].name)
+            print("What weapon do you want to use:")
 
 
+            #list all the weapons that you have and let you pick one
+
+            for i in range(len(player.inv)):
+
+                print(f"{i+1}: ", player.inv[i].name)
+
+            choice = int(input("> "))
+
+            player_weapon = player.inv[choice-1]
 
 
-        choice = int(input("> "))
-
-        #if choice == 1:
-
-        damage, bullets = player.inv[0].shoot()
-
-        enemy.health -= damage
-
-        print(f"You shot {bullets} rounds for a total of {damage} damage")
+            #if choice == 1:
 
 
-        print(f"The {enemy.name} now has {enemy.health} health remaining")
+            #Sets the damage and bullets with the class func
+            damage, bullets = player_weapon.shoot()
+
+            enemy.health -= damage
+
+            #Sets things health to zero if its negative for nicer visuals
+            if enemy.health < 0:
+                enemy.health = 0
 
 
+            print(f"You shot {bullets} rounds for a total of {damage} damage")
+            print(f"The {enemy.name} now has {enemy.health} health remaining")
+            print()
+
+
+        do_you_shoot_first = True
+
+        if enemy.health <= 0:
+            break
+
+
+        #picks a random weapon out of the enemys inventory
         op_weapon = random.choice(enemy.weapons)
+
+        #just does the same thing as before but for the enemy.
+
+
 
         damage, bullets = op_weapon.shoot()
 
         player.health -= damage
 
+        if player.health <0:
+            player.health = 0
 
         print(f"The {enemy.name} shot {bullets} into you for a total of {damage} damage")
         print(f"You are now on {player.health} health")
+        print()
+
+
 
 
     print("Somebody died")
@@ -49,7 +83,7 @@ def encounter(name):
 
     #picks a random message and a random name for the encounter.
     #example output:
-    #You see a Bastard in an alley way
+    #You see a Bandit in an alley way
 
     random_names = ("Bandit", "Bastard", "Robber", "Thug", "Brute", "Foe", "Savage")
 
@@ -226,7 +260,7 @@ weapon_data = [
 
 ]
 
-#Simple adds all the guns as classes to a list
+#Simply adds all the guns as classes to a list
 
 for i in weapon_data:
 
@@ -238,6 +272,7 @@ def main():
     print("Welcome to the game of something hopefully cool")
 
 
+#Just some testing stuff. temporaray
 player.inv.append(all_weapons[0])
 
 battle(True,"Bastard")
