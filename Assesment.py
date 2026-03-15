@@ -201,7 +201,7 @@ while True:
             #Makes a random pickup verb so its different each time
             pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
-            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,bullet,value,level,pickup_message):
+            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,level,bullet,value,,pickup_message):
                 self.name = name
                 self.damage = damage
                 self.clip_cap = clip_cap
