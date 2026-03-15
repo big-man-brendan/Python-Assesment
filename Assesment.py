@@ -201,7 +201,7 @@ while True:
             #Makes a random pickup verb so its different each time
             pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
-            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,bullet,value,pickup_message):
+            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,bullet,value,level,pickup_message):
                 self.name = name
                 self.damage = damage
                 self.clip_cap = clip_cap
@@ -210,7 +210,7 @@ while True:
                 self.bullet = bullet
                 self.value = value
                 self.pickup_message = pickup_message
-
+                self.level = level
 
 
 
@@ -275,12 +275,13 @@ while True:
 
         weapon_data = [
 
-            ("AK-47",40,30,70,650,"assault",500,"You {verb} the AK-47, Chambered in 7.62. It feels heavy in your hands. Maybe too heavy"),
-            ("AK-12",34,30,80,750,"assault",700,"You {verb} the AK-12. You know this gun. It's like the '47', but more balanced. In theory"),
-            ("Fal 50.0",49,20,75,400,"assault",1000,"You {verb} the FAl 50.0. It takes 7.62x51mm Nato rounds. A Beast, hopefully"),
-            ("AUG A3",32,30,90,850,"assault",1400,"You {verb} the AUG A3. The compact bullpup package, boasting supreme accuracy. "),
-            ("P90",24,50,60,1100,"smg",1200,"Cold polymer meets your grip as you {verb} the P90. You see the 50 round box mag. Its ready to take on a hoard"),
-            ("G11",15,33,65,2100,"assault",2600,"As you {verb} the G11, you feel the spirit of West Germany. Experimental, desperate, and ahead of its time."),
+            ("AK-47",40,30,70,650,1,"assault",500,"You {verb} the AK-47, Chambered in 7.62. It feels heavy in your hands. Maybe too heavy"),
+            ("AK-12",34,30,80,750,1,"assault",700,"You {verb} the AK-12. You know this gun. It's like the '47', but more balanced. In theory"),
+            ("Fal 50.0",49,20,75,400,2,"assault",1000,"You {verb} the FAl 50.0. It takes 7.62x51mm Nato rounds. A Beast, hopefully"),
+            ("AUG A3",32,30,90,850,3,"assault",1400,"You {verb} the AUG A3. The compact bullpup package, boasting supreme accuracy. "),
+            ("P90",24,50,60,1100,3,"smg",1200,"Cold polymer meets your grip as you {verb} the P90. You see the 50 round box mag. Its ready to take on a hoard"),
+            ("G11",15,33,65,2100,10,"assault",2600,"As you {verb} the G11, you feel the spirit of West Germany. Experimental, desperate, and ahead of its time."),
+            
 
 
         ]
