@@ -1,5 +1,6 @@
 import random
-import time
+
+
 
 while True:
 
@@ -99,6 +100,8 @@ while True:
 
 
 
+
+
         def encounter(name):
 
             #picks a random message and a random name for the encounter.
@@ -153,37 +156,13 @@ while True:
                     print(f"You managed to successfully sneak past the {name}")
 
                 else:
-                    print("The {name} caught you!!!")
+                    print(f"The {name} caught you!!!")
 
                     battle(False,name)
 
             if choice == "2":
 
                 battle(True,name)
-
-
-
-
-
-        def slow_text(text):
-
-            #Just makes the text come out a bit slower, and makes it so punctuation has a little more delay
-
-
-            for letter in str(text):
-                print(letter,end = '',flush= True)
-
-                if letter in (",",".","!",":","?"):
-                    time.sleep(0.1)
-
-                else: time.sleep(0.03)
-
-            print()
-
-
-
-
-
 
         #Makes the player class, so its easy to interact with the player.
 
@@ -201,7 +180,7 @@ while True:
             #Makes a random pickup verb so its different each time
             pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
-            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,level,bullet,value,,pickup_message):
+            def __init__(self, name,damage,clip_cap,accuracy,fire_rate,level,bullet,value,pickup_message):
                 self.name = name
                 self.damage = damage
                 self.clip_cap = clip_cap
@@ -227,6 +206,7 @@ while True:
                 bullets = round(bullets*variation)
 
                 variation = random.uniform(0.9, 1.1)
+
                 total_damage = round(variation * bullets * self.damage)
 
                 return total_damage ,bullets
