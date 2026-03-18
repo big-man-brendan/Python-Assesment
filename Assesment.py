@@ -25,13 +25,13 @@ while True:
                     for i in range(len(player.inv)):
 
 
-                        weapon = player.inv[i][0]
+                        weapon = player.inv[i]
 
                         print(f"{i + 1}: ", weapon.name,end = ' | ')
-                        print(f"{player.inv[i][1]}",end = ' | ')
+                        print(f"{weapon.ammo}",end = ' | ')
                         print(f"{player.ammo_inv[weapon.bullet]}",end = '')
 
-                        if player.inv[i][1] == 0:
+                        if weapon.ammo == 0:
                             print("  (RELOAD)")
 
 
@@ -39,23 +39,21 @@ while True:
 
                     choice = int(input("> "))
 
-                    player_weapon = player.inv[choice - 1][0]
+                    player_weapon = player.inv[choice - 1]
 
                     # Sets the damage and bullets with the class func
                     #and checks if you are reloading
 
-                    if player.inv[i][1] == 0:
+                    if player_weapon.ammo == 0:
                         pass
 
                     else:
 
 
 
-                        damage, bullets = player_weapon.shoot(player.inv[choice-1][1])
+                        damage, bullets = player_weapon.shoot()
 
                         player.ammo_inv[player_weapon.bullet] -= bullets
-
-                        player.inv[choice-1][1] -= bullets
 
                         enemy.health -= damage
 
@@ -187,7 +185,7 @@ while True:
             # Makes a random pickup verb so its different each time
             pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
-            def __init__(self, name, damage, clip_cap, accuracy, fire_rate, level, bullet, value, pickup_message):
+            def __init__(self, name, damage, clip_cap, accuracy, fire_rate, level, bullet, value, pickup_message,ammo):
                 self.name = name
                 self.damage = damage
                 self.clip_cap = clip_cap
@@ -197,8 +195,8 @@ while True:
                 self.value = value
                 self.pickup_message = pickup_message
                 self.level = level
-
-            def shoot(self,ammo_left):
+                self.ammo = ammo
+            def shoot(self):
                 # Calculate how much damage is done per turn.
                 # and add a bit of random variation so you might get slighty diffrent damage and stuff each time
 
@@ -217,6 +215,8 @@ while True:
 
                 total_damage = round(variation * bullets * self.damage)
 
+                self.ammo -= bullets
+
                 return total_damage, bullets
 
             def pick_up(self):
@@ -228,6 +228,13 @@ while True:
 
                 print(self.pickup_message.format(verb=verb))
 
+
+            def reload(self):
+
+                print(f"You reload the {self.name}")
+                print(f"{self.clip_cap} rounds goes into the weapon")
+
+                self.ammo = self.clip_cap
 
         # A class for the enemy.
         # I might not end up using it
@@ -275,10 +282,10 @@ while True:
 
         ]
 
-        # Simply adds all the guns as classes to a list
+        # Simply adds all the guns as classes to a list. and repeats the ammo cap to be the current ammo
 
         for i in weapon_data:
-            all_weapons.append(Weapon(*i))
+            all_weapons.append(Weapon(*i,i[2]))
 
 
         def main():
@@ -287,7 +294,7 @@ while True:
 
         # Just some testing stuff. temporary
 
-        player.inv.append([all_weapons[0],all_weapons[0].clip_cap])
+        player.inv.append(all_weapons[0])
 
         battle(True, "Bastard")
 
