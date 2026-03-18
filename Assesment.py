@@ -7,7 +7,7 @@ while True:
         def battle(do_you_shoot_first, name):
 
             # Sets the enemy for ease of use. will change to be random based on things later
-            enemy = Enemy(name, random.randint(600, 1400), [all_weapons[0]])
+            enemy = Enemy(name, random.randint(10000, 10000), [all_weapons[0]])
 
             # just loop intull someone dies
             while player.health > 0 and enemy.health > 0:
@@ -25,36 +25,46 @@ while True:
                     for i in range(len(player.inv)):
 
 
-                        weapon = list(player.inv)[0]
+                        weapon = player.inv[i][0]
 
                         print(f"{i + 1}: ", weapon.name,end = ' | ')
-                        print(f"{player.inv[weapon]}",end = ' | ')
-                        print(f"{player.ammo_inv[weapon.bullet]}")
+                        print(f"{player.inv[i][1]}",end = ' | ')
+                        print(f"{player.ammo_inv[weapon.bullet]}",end = '')
+
+                        if player.inv[i][1] == 0:
+                            print("  (RELOAD)")
 
 
                     print()
 
-
-
                     choice = int(input("> "))
 
-                    player_weapon = player.inv[choice - 1]
-
-                    # if choice == 1:
+                    player_weapon = player.inv[choice - 1][0]
 
                     # Sets the damage and bullets with the class func
-                    damage, bullets = player_weapon.shoot()
+                    #and checks if you are reloading
 
-                    player.ammo_inv[player_weapon.bullet] -= bullets
+                    if player.inv[i][1] == 0:
+                        pass
 
-                    enemy.health -= damage
+                    else:
 
-                    # Sets things health to zero if its negative for nicer visuals
-                    if enemy.health < 0:
-                        enemy.health = 0
 
-                    print(f"You shot {bullets} rounds for a total of {damage} damage")
-                    print(f"The {enemy.name} now has {enemy.health} health remaining")
+
+                        damage, bullets = player_weapon.shoot(player.inv[choice-1][1])
+
+                        player.ammo_inv[player_weapon.bullet] -= bullets
+
+                        player.inv[choice-1][1] -= bullets
+
+                        enemy.health -= damage
+
+                        # Sets things health to zero if its negative for nicer visuals
+                        if enemy.health < 0:
+                            enemy.health = 0
+
+                        print(f"You shot {bullets} rounds for a total of {damage} damage")
+                        print(f"The {enemy.name} now has {enemy.health} health remaining")
                     print()
 
                 do_you_shoot_first = True
@@ -67,7 +77,7 @@ while True:
 
                 # just does the same thing as before but for the enemy.
 
-                damage, bullets = op_weapon.shoot()
+                damage, bullets = op_weapon.shoot(1000)
 
                 player.health -= damage
 
@@ -188,15 +198,20 @@ while True:
                 self.pickup_message = pickup_message
                 self.level = level
 
-            def shoot(self):
+            def shoot(self,ammo_left):
                 # Calculate how much damage is done per turn.
                 # and add a bit of random variation so you might get slighty diffrent damage and stuff each time
+
+
+
 
                 variation = random.uniform(0.8, 1.2)
 
                 bullets = (self.fire_rate / 60) * self.accuracy
 
-                bullets = round(bullets * variation)
+                #makes it so if you have not much bullets left it does it properly
+
+                bullets = min(round(bullets * variation),ammo_left)
 
                 variation = random.uniform(0.9, 1.1)
 
@@ -236,7 +251,7 @@ while True:
 
 
         # Makes the player with the player class
-        player = Player("Player", 1000, {},{"assault":0,"smg":0})
+        player = Player("Player", 9999999, [],{"assault":0,"smg":0})
 
         all_weapons = []
 
@@ -272,7 +287,7 @@ while True:
 
         # Just some testing stuff. temporary
 
-        player.inv[all_weapons[0]] = all_weapons[0].clip_cap
+        player.inv.append([all_weapons[0],all_weapons[0].clip_cap])
 
         battle(True, "Bastard")
 
@@ -280,3 +295,12 @@ while True:
 
     except KeyboardInterrupt:
         print("Game Restarted")
+
+
+#we have it like this
+
+#[{ak_47_class:ammo_amount},{aug_a3_class:ammo_amount}]
+
+#we need it like this
+
+#[
