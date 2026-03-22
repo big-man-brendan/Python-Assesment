@@ -12,7 +12,6 @@ def battle(do_you_shoot_first, name):
         if do_you_shoot_first:
 
             print("What weapon do you want to use:\n")
-
             # List all the weapons that you have and let you pick one
             print("   Weapon | Ammo | Total Ammo\n")
 
@@ -25,16 +24,39 @@ def battle(do_you_shoot_first, name):
                 if weapon.ammo == 0:
                     print("  (RELOAD)")
 
+                print()
+
             print()
 
-            choice = int(input("> "))
-            player_weapon = player.inv[choice - 1]
+            while not False:
+
+                try:
+
+                    choice = int(input("> "))
+
+                    player_weapon = player.inv[choice - 1]
+
+                    break
+
+                except IndexError:
+                    print("Theres no weapon there")
+                except ValueError:
+                    print("Please pick a proper number")
+
+                print()
+
 
             # Sets the damage and bullets with the class func
             # and checks if you are reloading
             if player_weapon.ammo == 0:
+
                 bullets_left = player.ammo_inv[player_weapon.bullet]
-                player_weapon.reload(True, bullets_left)
+
+                spent_ammo = player_weapon.reload(True, bullets_left)
+
+                player.ammo_inv[player_weapon.bullet] -= spent_ammo
+
+
 
             else:
                 damage, bullets = player_weapon.shoot()
@@ -217,6 +239,7 @@ class Weapon:
             if player_or_op:
                 print("You don't have enough ammo to reload")
 
+        return self.ammo
 
 class Enemy:
     """A class for the enemy. Might not end up using it."""
@@ -263,7 +286,7 @@ weapon_data = [
         "You {verb} the AUG A3. The compact bullpup package, boasting supreme accuracy. ",
     ),
     (
-        "P90", 24, 50, 60, 1100, 3, "smg", 1200,
+        "P90", 24, 50, 60, 1300, 3, "smg", 1200,
         "Cold polymer meets your grip as you {verb} the P90. You see the 50 round box mag. Its ready to take on a hoard",
     ),
     (
@@ -283,7 +306,11 @@ def main():
 
 
 # Just some testing stuff. Temporary
+
 player.inv.append(all_weapons.pop(0))
+player.inv.append(all_weapons.pop(3))
+player.inv.append(all_weapons.pop(3))
+
 player.ammo_inv["assault"] = 15
 
 battle(True, "Bastard")
