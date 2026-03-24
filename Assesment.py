@@ -188,7 +188,7 @@ class Player:
 
 
 class Weapon:
-    """Allows a lot of weapons to be made cleanly."""
+    #Allows a lot of weapons to be made cleanly
 
     # Makes a random pickup verb so it's different each time
     pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
@@ -248,7 +248,7 @@ class Weapon:
         return self.ammo
 
 class Enemy:
-    """A class for the enemy. Might not end up using it."""
+    #A class for the enemy
 
     def __init__(self, name, health, weapons):
         self.name = name
@@ -260,7 +260,7 @@ class Enemy:
 
 
 class Item:
-    """A class for items, which can be randomly picked up and sold for money."""
+    #A class for items, which can be randomly picked up and sold for money
 
     def __init__(self, name, value):
         self.name = name
