@@ -2,6 +2,7 @@ import random
 
 
 def battle(do_you_shoot_first, name):
+
     # Sets the enemy for ease of use. Will change to be random based on things later
     enemy = Enemy(name, random.randint(10000, 10000), [all_weapons[0]])
 
@@ -100,21 +101,26 @@ def battle(do_you_shoot_first, name):
 
     if player.health == 0:
         print("GAME OVER")
+        main()
 
-    # A 30 percent chance for the enemy to drop something random out of their inventory
-    item_drop = 0
-
-    if random.randint(1, 10) > 7:
-        item_drop = random.choice(enemy.weapons)
-
-    print("You won the fight!!")
-
-    if item_drop:
-        print(f"The {enemy.name} dropped an {item_drop.name}")
-        player.inv.append(item_drop)
 
     else:
-        print(f"The {enemy.name} didn't drop anything")
+
+        # A 30 percent chance for the enemy to drop something random out of their inventory
+
+        item_drop = 0
+
+        if random.randint(1, 10) > 7:
+            item_drop = random.choice(enemy.weapons)
+
+        if item_drop:
+            print(f"The {enemy.name} dropped an {item_drop.name}")
+            player.inv.append(item_drop)
+
+
+        #make the enemy drop some ammo
+
+
 
 
 def encounter(name):
@@ -262,7 +268,7 @@ class Item:
 
 
 # Makes the player with the player class
-player = Player("Player", 9999999, [], {"assault": 0, "smg": 0})
+player = Player("Player", 9999999, [], {"assault": 0, "smg": 0,"shotgun":0,"pistol":0,"sniper":0})
 
 all_weapons = []
 
@@ -305,17 +311,21 @@ def main():
     print("Welcome to the game of something hopefully cool")
 
 
-# Just some testing stuff. Temporary
+    # Just some testing stuff. Temporary
 
-player.inv.append(all_weapons.pop(0))
-player.inv.append(all_weapons.pop(3))
-player.inv.append(all_weapons.pop(3))
+    player.inv.append(all_weapons.pop(0))
+    player.inv.append(all_weapons.pop(3))
+    player.inv.append(all_weapons.pop(3))
 
-player.ammo_inv["assault"] = 15
+    player.ammo_inv["assault"] = 15
 
-battle(True, "Bastard")
+    battle(True, "Bastard")
+
+
 
 main()
+
+print("Garr")
 
 
 # we have it like this
