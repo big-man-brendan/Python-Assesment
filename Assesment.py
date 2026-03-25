@@ -2,7 +2,6 @@ import random
 
 
 def battle(do_you_shoot_first, name):
-
     # Sets the enemy for ease of use. Will change to be random based on things later
 
     enemy = Enemy(name, random.randint(700, 1400), [random.choice(all_weapons)])
@@ -16,9 +15,7 @@ def battle(do_you_shoot_first, name):
             print("What weapon do you want to use:\n")
             # List all the weapons that you have and let you pick one
 
-            list_weapons()
-
-
+            list_weapons(player.inv)
 
             while not False:
 
@@ -116,11 +113,7 @@ def battle(do_you_shoot_first, name):
 
             print(f"The {enemy.name} dropped a {item_drop.name}. Its worth ${item_drop.value} bucks")
 
-
-
         # make the enemy drop some ammo
-
-
 
 
 def encounter(name):
@@ -177,12 +170,11 @@ def encounter(name):
         battle(True, name)
 
 
-def list_weapons():
-
+def list_weapons(inv):
     print("   Weapon | Ammo | Total Ammo\n")
 
-    for i in range(len(player.inv)):
-        weapon = player.inv[i]
+    for i in range(len(inv)):
+        weapon = inv[i]
         print(f"{i + 1}: ", weapon.name, end=" | ")
         print(f"{weapon.ammo}", end=" | ")
         print(f"{player.ammo_inv[weapon.bullet]}", end="")
@@ -193,15 +185,10 @@ def list_weapons():
         print()
 
 
-
-
 def collect_weapon(weapon):
-
     weapon.pick_up()
 
-    #You can only have 3 weapons so you have to drop one
-
-
+    # You can only have 3 weapons so you have to drop one
 
     if len(player.inv) >= 3:
 
@@ -210,7 +197,7 @@ def collect_weapon(weapon):
         print("Which one do you want to drop")
         print()
 
-        list_weapons()
+        list_weapons(player.inv)
 
         print(f"4: ", weapon.name, end=" | ")
         print(f"{weapon.ammo}", end=" | ")
@@ -218,7 +205,6 @@ def collect_weapon(weapon):
         print(" (new) ")
 
         print()
-
 
         while True:
 
@@ -229,7 +215,7 @@ def collect_weapon(weapon):
                 if choice == 4:
                     break
 
-                choice = player.inv[choice-1]
+                choice = player.inv[choice - 1]
                 break
 
 
@@ -253,16 +239,135 @@ def collect_weapon(weapon):
             player.inv.append(weapon)
 
 
+def shop():
+    print("Welcome to Matthew Chung's shop")
+
+    print("What do you want to do:\n")
+
+    print("1: Buy\n2: Sell\n3: Exit\n")
+
+    while True:
+        try:
+
+            choice = int(input("> "))
+
+            if choice in (1, 2, 3):
+                break
+
+            else:
+                print("You have to pick a option")
+
+        except ValueError:
+            print("Pick a number")
+
+    print()
+
+    if choice == 1:
+
+        products = []
+
+        for _ in range(3):
+            random_weapon = all_weapons.pop(random.randint(0, len(all_weapons) - 1))
+
+            products.append(random_weapon)
+
+        print("   Weapon | Price \n")
+
+
+        for i in range(len(products)):
+            weapon = products[i]
+            print(f"{i + 1}: ", weapon.name, end=" | ")
+
+            print(f"${weapon.value}", end="")
+            print()
+
+
+        print("4:  Exit")
+
+        while True:
+
+            try:
+
+                choice = int(input("> "))
+
+                if choice in (1, 2, 4, 5, 6):
+                    break
+
+                else:
+                    print("Pick a proper number")
+            except ValueError:
+                print("Pick a number")
+
+        match choice:
+
+            case 1:
+
+                weapon = products[choice-1]
+
+                weapon.pick_up()
+
+                print(f"You have ${player.money}")
+                print(f"This one cost ${weapon.value}")
+
+                if player.money < weapon.value:
+                    print("You can't afford it")
+
+                else:
+
+                    print("Do you want to buy")
+                    print("1: Yes\n2: No")
+
+                    while True:
+                        try:
+                            pass
+
+                        except ValueError:
+                            pass
+
+
+
+
+            case 2:
+                pass
+
+            case 3:
+                pass
+
+            case 4:
+                pass
+
+            case 5:
+                return
+
+
+    elif choice == 2:
+        print("Sell")
+
+
+    elif choice == 3:
+        print("Exit")
+        return
+
+
+def menu():
+
+
+    print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart\n5: Exit")
+    print()
+
+
 
 
 class Player:
-    #Makes the player class, so it's easy to interact with the player.
+    # Makes the player class, so it's easy to interact with the player.
 
-    def __init__(self, name, health, inv, ammo_inv):
+    def __init__(self, name, health, inv, ammo_inv, money):
         self.name = name
         self.health = health
         self.inv = inv
         self.ammo_inv = ammo_inv
+        self.money = money
+
 
 
 class Weapon:
@@ -346,7 +451,7 @@ class Item:
         self.value = value
 
 
-
+#just a list for a bunch of random items to drop
 heaps_of_items = [
     Item("Broken gun", 40),
     Item("Spoon", 5),
@@ -374,12 +479,16 @@ heaps_of_items = [
 ]
 
 # Makes the player with the player class
-player = Player("Player", 1000, [], {"assault": 0, "smg": 0, "shotgun": 0, "pistol": 0, "sniper": 0})
+player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10},0)
 
-all_weapons = []
+
+
 
 # Sets up all the weapons. Each one has a name, damage, and so on.
 # The {verb} in the pick up message gets replaced randomly inside the class each time guns are picked up
+
+all_weapons = []
+
 weapon_data = [
     (
         "AK-47", 40, 30, 70, 650, 1, "assault", 500,
@@ -418,17 +527,17 @@ def main():
 
     # Just some testing stuff. Temporary
 
-
+    shop()
 
     player.inv.append(all_weapons.pop(0))
-    player.inv.append(all_weapons.pop(3))
-    player.inv.append(all_weapons.pop(3))
+    # player.inv.append(all_weapons.pop(3))
+    # player.inv.append(all_weapons.pop(3))
 
-    collect_weapon(all_weapons[2])
+    collect_weapon(all_weapons[0])
 
     player.ammo_inv["assault"] = 15
 
-    battle(True, "Bastard")
+    encounter(0)
 
 
 main()
