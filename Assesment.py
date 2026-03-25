@@ -2,7 +2,6 @@ import random
 
 
 def battle(do_you_shoot_first, name):
-
     # Sets the enemy for ease of use. Will change to be random based on things later
     enemy = Enemy(name, random.randint(10000, 10000), [all_weapons[0]])
 
@@ -14,20 +13,10 @@ def battle(do_you_shoot_first, name):
 
             print("What weapon do you want to use:\n")
             # List all the weapons that you have and let you pick one
-            print("   Weapon | Ammo | Total Ammo\n")
 
-            for i in range(len(player.inv)):
-                weapon = player.inv[i]
-                print(f"{i + 1}: ", weapon.name, end=" | ")
-                print(f"{weapon.ammo}", end=" | ")
-                print(f"{player.ammo_inv[weapon.bullet]}", end="")
+            list_weapons()
 
-                if weapon.ammo == 0:
-                    print("  (RELOAD)")
 
-                print()
-
-            print()
 
             while not False:
 
@@ -45,7 +34,6 @@ def battle(do_you_shoot_first, name):
                     print("Please pick a proper number")
 
                 print()
-
 
             # Sets the damage and bullets with the class func
             # and checks if you are reloading
@@ -115,10 +103,13 @@ def battle(do_you_shoot_first, name):
 
         if item_drop:
             print(f"The {enemy.name} dropped an {item_drop.name}")
-            player.inv.append(item_drop)
+
+            CollectWeapon(item_drop)
 
 
-        #make the enemy drop some ammo
+
+
+        # make the enemy drop some ammo
 
 
 
@@ -128,7 +119,7 @@ def encounter(name):
     # Example output:
     # You see a Bandit in an alley way
 
-    random_names = ("Bandit", "Bastard", "Robber", "Thug", "Brute", "Foe", "Savage")
+    random_names = ("Bandit", "Bastard", "Robber", "Thug", "Brute", "Foe", "Savage", "Matthew Chung")
 
     if not name:
         name = random.choice(random_names)
@@ -177,8 +168,70 @@ def encounter(name):
         battle(True, name)
 
 
+def list_weapons():
+
+    print("   Weapon | Ammo | Total Ammo\n")
+
+    for i in range(len(player.inv)):
+        weapon = player.inv[i]
+        print(f"{i + 1}: ", weapon.name, end=" | ")
+        print(f"{weapon.ammo}", end=" | ")
+        print(f"{player.ammo_inv[weapon.bullet]}", end="")
+
+        if weapon.ammo == 0:
+            print("  (RELOAD)")
+
+        print()
+
+    print()
+
+
+def collect_weapon(weapon):
+
+    weapon.pick_up()
+
+    #You can only have 3 weapons so you have to drop one
+
+
+
+    if len(player.inv) >= 3:
+
+        print("You can only have 3 weapons")
+        print("Which one do you want to drop")
+
+
+        list_weapons()
+
+        print(f"4: ", weapon.name, end=" | ")
+        print(f"{weapon.ammo}", end=" | ")
+        print(f"{player.ammo_inv[weapon.bullet]}", end="")
+        print(" (new) ")
+
+
+        while True:
+
+            try:
+
+                choice = int(input("> "))
+
+                if choice == 4:
+                    break
+
+                choice = player.inv[choice-1]
+                break
+
+
+            except ValueError:
+                print("Pick a number")
+            except IndexError:
+                print("Theres no weapon there")
+
+
+        if choice == 4:
+            pass
+
 class Player:
-    """Makes the player class, so it's easy to interact with the player."""
+    #Makes the player class, so it's easy to interact with the player.
 
     def __init__(self, name, health, inv, ammo_inv):
         self.name = name
@@ -188,14 +241,14 @@ class Player:
 
 
 class Weapon:
-    #Allows a lot of weapons to be made cleanly
+    # Allows a lot of weapons to be made cleanly
 
     # Makes a random pickup verb so it's different each time
     pick_up_verbs = ["grab", "take", "lift", "secure", "shoulder"]
 
     def __init__(
-        self, name, damage, clip_cap, accuracy, fire_rate, level, bullet, value,
-        pickup_message, ammo
+            self, name, damage, clip_cap, accuracy, fire_rate, level, bullet, value,
+            pickup_message, ammo
     ):
         self.name = name
         self.damage = damage
@@ -247,8 +300,9 @@ class Weapon:
 
         return self.ammo
 
+
 class Enemy:
-    #A class for the enemy
+    # A class for the enemy
 
     def __init__(self, name, health, weapons):
         self.name = name
@@ -260,15 +314,18 @@ class Enemy:
 
 
 class Item:
-    #A class for items, which can be randomly picked up and sold for money
+    # A class for items, which can be randomly picked up and sold for money
 
     def __init__(self, name, value):
         self.name = name
         self.value = value
 
 
+
+
+
 # Makes the player with the player class
-player = Player("Player", 9999999, [], {"assault": 0, "smg": 0,"shotgun":0,"pistol":0,"sniper":0})
+player = Player("Player", 9999999, [], {"assault": 0, "smg": 0, "shotgun": 0, "pistol": 0, "sniper": 0})
 
 all_weapons = []
 
@@ -310,23 +367,24 @@ for i in weapon_data:
 def main():
     print("Welcome to the game of something hopefully cool")
 
-
     # Just some testing stuff. Temporary
+
+
 
     player.inv.append(all_weapons.pop(0))
     player.inv.append(all_weapons.pop(3))
     player.inv.append(all_weapons.pop(3))
+
+    collect_weapon(all_weapons[2])
 
     player.ammo_inv["assault"] = 15
 
     battle(True, "Bastard")
 
 
-
 main()
 
 print("Garr")
-
 
 # we have it like this
 # [{ak_47_class:ammo_amount},{aug_a3_class:ammo_amount}]
