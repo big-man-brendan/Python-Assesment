@@ -2,8 +2,10 @@ import random
 
 
 def battle(do_you_shoot_first, name):
+
     # Sets the enemy for ease of use. Will change to be random based on things later
-    enemy = Enemy(name, random.randint(10000, 10000), [all_weapons[0]])
+
+    enemy = Enemy(name, random.randint(700, 1400), [random.choice(all_weapons)])
 
     # Just loop until someone dies
     while player.health > 0 and enemy.health > 0:
@@ -89,23 +91,30 @@ def battle(do_you_shoot_first, name):
 
     if player.health == 0:
         print("GAME OVER")
-        main()
+        exit()
 
 
     else:
 
-        # A 30 percent chance for the enemy to drop something random out of their inventory
+        # A 70 percent chance for the enemy to drop something random out of their inventory
+        # then if not then they will drop an item
 
         item_drop = 0
 
-        if random.randint(1, 10) > 7:
+        if random.randint(1, 10) > 3:
             item_drop = random.choice(enemy.weapons)
 
         if item_drop:
             print(f"The {enemy.name} dropped an {item_drop.name}")
 
-            CollectWeapon(item_drop)
+            collect_weapon(item_drop)
 
+
+        else:
+
+            item_drop = random.choice(heaps_of_items)
+
+            print(f"The {enemy.name} dropped a {item_drop.name}. Its worth ${item_drop.value} bucks")
 
 
 
@@ -183,7 +192,7 @@ def list_weapons():
 
         print()
 
-    print()
+
 
 
 def collect_weapon(weapon):
@@ -196,9 +205,10 @@ def collect_weapon(weapon):
 
     if len(player.inv) >= 3:
 
+        print()
         print("You can only have 3 weapons")
         print("Which one do you want to drop")
-
+        print()
 
         list_weapons()
 
@@ -207,13 +217,15 @@ def collect_weapon(weapon):
         print(f"{player.ammo_inv[weapon.bullet]}", end="")
         print(" (new) ")
 
+        print()
+
 
         while True:
 
             try:
 
                 choice = int(input("> "))
-
+                print()
                 if choice == 4:
                     break
 
@@ -225,10 +237,23 @@ def collect_weapon(weapon):
                 print("Pick a number")
             except IndexError:
                 print("Theres no weapon there")
-
+            print()
 
         if choice == 4:
-            pass
+
+            print(f"You got rid of the {weapon.name}")
+
+
+        else:
+
+            print(f"You dropped your {choice.name}")
+
+            player.inv.remove(choice)
+
+            player.inv.append(weapon)
+
+
+
 
 class Player:
     #Makes the player class, so it's easy to interact with the player.
@@ -322,10 +347,34 @@ class Item:
 
 
 
-
+heaps_of_items = [
+    Item("Broken gun", 40),
+    Item("Spoon", 5),
+    Item("Rusty bolt", 2),
+    Item("Roll of duck tape", 15),
+    Item("Empty bottle", 1),
+    Item("Crumpled note", 2),
+    Item("Old phone", 25),
+    Item("Scrap metal", 12),
+    Item("Loose screw", 1),
+    Item("Torn backpack", 18),
+    Item("Car battery", 60),
+    Item("Glass shard", 4),
+    Item("Oil can", 20),
+    Item("Used bandage", 6),
+    Item("Broken watch", 10),
+    Item("Random key", 8),
+    Item("Metal pipe", 35),
+    Item("Worn glove", 14),
+    Item("Flashlight", 22),
+    Item("Kitkat", 2),
+    Item("Circuit board", 45),
+    Item("Can of beans", 7),
+    Item("Radio", 55),
+]
 
 # Makes the player with the player class
-player = Player("Player", 9999999, [], {"assault": 0, "smg": 0, "shotgun": 0, "pistol": 0, "sniper": 0})
+player = Player("Player", 1000, [], {"assault": 0, "smg": 0, "shotgun": 0, "pistol": 0, "sniper": 0})
 
 all_weapons = []
 
