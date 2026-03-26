@@ -305,10 +305,10 @@ def shop():
                 weapon = products[choice-1]
 
                 weapon.pick_up()
-
+                print()
                 print(f"You have ${player.money}")
                 print(f"This one cost ${weapon.value}")
-
+                print()
                 if player.money < weapon.value:
                     print("You can't afford it")
 
@@ -319,7 +319,9 @@ def shop():
 
                     while True:
                         try:
-                            pass
+
+                            choice = int(input("> "))
+                            if choice
 
                         except ValueError:
                             pass
@@ -542,7 +544,7 @@ def main():
 
 main()
 
-print("Garr")
+print("Finished")
 
 # we have it like this
 # [{ak_47_class:ammo_amount},{aug_a3_class:ammo_amount}]
