@@ -266,7 +266,7 @@ def shop():
 
         products = []
 
-        for _ in range(3):
+        for _ in range(5):
             random_weapon = all_weapons.pop(random.randint(0, len(all_weapons) - 1))
 
             products.append(random_weapon)
@@ -282,7 +282,7 @@ def shop():
             print()
 
 
-        print("4:  Exit")
+        print("6:  Exit")
 
         while True:
 
@@ -298,48 +298,40 @@ def shop():
             except ValueError:
                 print("Pick a number")
 
-        match choice:
 
-            case 1:
-
-                weapon = products[choice-1]
-
-                weapon.pick_up()
-                print()
-                print(f"You have ${player.money}")
-                print(f"This one cost ${weapon.value}")
-                print()
-                if player.money < weapon.value:
-                    print("You can't afford it")
-
-                else:
-
-                    print("Do you want to buy")
-                    print("1: Yes\n2: No")
-
-                    while True:
-                        try:
-
-                            choice = int(input("> "))
-                            if choice
-
-                        except ValueError:
-                            pass
+        if choice == 6:
+            return
 
 
 
+        else:
 
-            case 2:
-                pass
+            weapon = products[choice-1]
 
-            case 3:
-                pass
+            weapon.pick_up()
 
-            case 4:
-                pass
+            print(f"You have ${player.money}")
+            print(f"This one cost ${weapon.value}")
 
-            case 5:
-                return
+            if player.money < weapon.value:
+                print("You can't afford it")
+
+            else:
+
+                print("Do you want to buy")
+                print("1: Yes\n2: No")
+
+                while True:
+                    try:
+                        pass
+
+                    except ValueError:
+                        pass
+
+
+
+
+
 
 
     elif choice == 2:
@@ -353,9 +345,41 @@ def shop():
 
 def menu():
 
+    while True:
 
-    print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart\n5: Exit")
-    print()
+
+        print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart\n5: Exit")
+
+        while True:
+            try:
+
+                choice = int(input("> "))
+
+                if choice in (1,2,3,4,5):
+                    break
+
+                else:
+                    print("Pick an option")
+
+            except ValueError:
+                print("Enter a number")
+
+
+        match choice:
+
+            case 1:
+
+                encounter(0)
+
+
+            case 2:
+                print("Inventory")
+
+            case 3:
+                shop()
+
+            case 4:
+                print("Exit")
 
 
 
@@ -481,7 +505,7 @@ heaps_of_items = [
 ]
 
 # Makes the player with the player class
-player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10},0)
+player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10},10000)
 
 
 
@@ -529,11 +553,13 @@ def main():
 
     # Just some testing stuff. Temporary
 
-    shop()
+
 
     player.inv.append(all_weapons.pop(0))
     # player.inv.append(all_weapons.pop(3))
     # player.inv.append(all_weapons.pop(3))
+
+    menu()
 
     collect_weapon(all_weapons[0])
 
@@ -544,7 +570,7 @@ def main():
 
 main()
 
-print("Finished")
+print("Garr")
 
 # we have it like this
 # [{ak_47_class:ammo_amount},{aug_a3_class:ammo_amount}]
