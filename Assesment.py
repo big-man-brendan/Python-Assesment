@@ -240,71 +240,117 @@ def collect_weapon(weapon):
 
 
 def shop():
+
+
+
+    def buy_ammo(type,amount,price):
+        
+        if player.money >= price:
+
+            print("Do you want to buy\n1: Yes\n2: No")
+
+            while True:
+                
+                try:
+
+                    choice = int(input("> "))
+
+                    if choice in (1,2):
+                        break
+
+                    else:
+                        print("Enter a proper number")
+
+                
+                except ValueError:
+                    print("Enter a number")
+
+
+
+            if choice == 1:
+    
+                player.money -= price
+                
+                player.ammo_inv[type] += amount
+
+
+
+
     print("Welcome to Matthew Chung's shop")
 
     print("What do you want to do:\n")
 
-    print("1: Buy\n2: Sell\n3: Exit\n")
-
     while True:
-        try:
 
-            choice = int(input("> "))
-
-            if choice in (1, 2, 3):
-                break
-
-            else:
-                print("You have to pick a option")
-
-        except ValueError:
-            print("Pick a number")
-
-    print()
-
-    if choice == 1:
-
-        products = []
-
-        for _ in range(3):
-            random_weapon = all_weapons.pop(random.randint(0, len(all_weapons) - 1))
-
-            products.append(random_weapon)
-
-        print("   Weapon | Price \n")
-
-
-        for i in range(len(products)):
-            weapon = products[i]
-            print(f"{i + 1}: ", weapon.name, end=" | ")
-
-            print(f"${weapon.value}", end="")
-            print()
-
-
-        print("4:  Exit")
+        print("1: Buy Guns\n2: Buy Ammo\n3: Sell\n4: Exit\n")
 
         while True:
-
             try:
 
                 choice = int(input("> "))
 
-                if choice in (1, 2, 4, 5, 6):
+                if choice in (1, 2, 3,4):
                     break
 
                 else:
-                    print("Pick a proper number")
+                    print("You have to pick a option")
+
             except ValueError:
                 print("Pick a number")
 
-        match choice:
+        print()
 
-            case 1:
+        if choice == 1:
+
+            products = []
+            products_index = []
+
+            for _ in range(3):
+                index = random.randint(0, len(all_weapons) - 1)
+
+                products_index.append(index)
+
+                products.append(all_weapons[index])
+
+
+            print(f"You have ${player.money}")
+
+
+            for i in range(len(products)):
+                weapon = products[i]
+                print(f"{i + 1}: ", weapon.name, end=" | ")
+
+                print(f"${weapon.value}", end="")
+                print()
+
+
+            print("6:  Exit")
+
+            while True:
+
+                try:
+
+                    choice = int(input("> "))
+
+                    if choice in (1, 2, 4, 5, 6):
+                        break
+
+                    else:
+                        print("Pick a proper number")
+                except ValueError:
+                    print("Pick a number")
+
+
+            if choice == 6:
+                pass
+
+
+            else:
+
 
                 weapon = products[choice-1]
 
-                weapon.pick_up()
+
                 print()
                 print(f"You have ${player.money}")
                 print(f"This one cost ${weapon.value}")
@@ -321,34 +367,119 @@ def shop():
                         try:
 
                             choice = int(input("> "))
-                            if choice
+
+                            if choice in (1,2):
+                                break
+
+                            else:
+                                print("Enter a proper number")
 
                         except ValueError:
-                            pass
+                            print("Enter a number")
+
+
+                    if choice == 1:
+
+                        all_weapons.remove(weapon)
+
+                        player.money -= weapon.value
+
+                        collect_weapon(weapon)
+
+
+                    if choice == 2:
+                        pass
 
 
 
 
-            case 2:
-                pass
-
-            case 3:
-                pass
-
-            case 4:
-                pass
-
-            case 5:
-                return
+        elif choice == 2:
+            print("Buy Ammo")
 
 
-    elif choice == 2:
-        print("Sell")
+            print("What do you want to buy do you want to buy:")
+            print()
+            print("       Ammo | Your Ammo")
+
+            print(f"1: Assault: {player.ammo_inv['assault']}")
+            print(f"2: SMG: {player.ammo_inv['smg']}")
+            print(f"3: Shotgun: {player.ammo_inv['shotgun']}")
+            print(f"4: Pistol: {player.ammo_inv['pistol']}")
+            print(f"5: Sniper: {player.ammo_inv['sniper']}")
+            print("6: Exit")
 
 
-    elif choice == 3:
-        print("Exit")
-        return
+
+            while True:
+
+                try:
+
+                    choice = int(input("> "))
+
+                    if choice in (1,2,3,4,5,6):
+                        break
+
+                    else:
+                        print("Enter a proper nubmer")
+
+                except ValueError:
+                    print("Enter a number")
+
+
+            print(f"You have {player.money}")
+
+            print("You can get ",end = '')
+
+            match choice:
+
+                case 1:
+
+                    print("30 rounds for $100 Dollars")
+
+                    buy_ammo("assault",30,100)
+
+                
+                case 2:
+
+                    print("60 rounds for $100 Dollars")
+                    buy_ammo("smg",60,100)
+
+                case 3:
+                    print("12 shells for $100 Dollars")
+                    buy_ammo("shotgun",12,100)
+
+                case 4:
+                    
+                    print("48 rounds for 100 dollars")
+                    buy_ammo("pistol",48,100)
+                    
+                case 5:
+
+                    print("8 round for 100 dollars")
+                    buy_ammo("sniper",8,100)
+                
+                case 6:
+                    
+                    pass
+        
+                
+                
+
+
+
+
+            print()
+
+
+            print()
+
+
+        elif choice == 3:
+            print("Sell")
+
+        elif choice == 4:
+            print("Exit")
+            return
 
 
 def menu():
@@ -481,7 +612,7 @@ heaps_of_items = [
 ]
 
 # Makes the player with the player class
-player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10},0)
+player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10},10000)
 
 
 
@@ -516,7 +647,36 @@ weapon_data = [
         "G11", 15, 33, 65, 2100, 10, "assault", 2600,
         "As you {verb} the G11, you feel the spirit of West Germany. Experimental, desperate, and ahead of its time.",
     ),
-]
+    (   "NTW-20",600, 1, 95, 5, 10, "sniper", 6000,
+        "You {verb} the NTW-20. A monster of a gun. You can barely handle it. You feel bad for its future victims",
+    ),
+    (
+        "Remington 870", 70, 8, 50, 200, 1, "shotgun", 400,
+        "You {verb} the Remington 870. A classic pump action shotgun. Reliable, and unbreakable. Maybe a bit simple."
+        
+    ),
+    (    "Zip 22", 3, 10, 40, 300, 10, "pistol", 10000,
+        "As you {verb} the Zip 22, you feel the power of the beast. 10 Grand, worth every penny."
+
+    ),
+    (    "Famas F1", 32, 25, 65, 1100, 2, "assault", 1100,
+        "You {verb} the Famas F1. The French bullpup. It looks weird, and shoots weird, but effective nonetheless."
+
+    ),
+    (    "M4A1", 33, 30, 80, 900, 2, "assault", 900,
+        "'The most boring gun in the world', you think as you {verb} the M4A1."
+    ),
+
+
+
+
+
+
+
+
+
+
+]   
 
 # Simply adds all the guns as classes to a list,
 # and repeats the ammo cap to be the current ammo
