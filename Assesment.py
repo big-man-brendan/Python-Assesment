@@ -11,7 +11,14 @@ def start():
     print("A Kalashnikov AK-47")
     time.sleep(0.5)
     print("Fully loaded and ready to go")
+    time.sleep(0.2)
+    print("You walk out of the cave, and see the city")
+    time.sleep(0.2)
+    print("Then you remember. The man who killed your family")
+    time.sleep(0.2)
+    print("You have to chase him")
 
+    player.inv.append(all_weapons.pop(0))
 
 
 def battle(do_you_shoot_first, name):
@@ -99,15 +106,24 @@ def battle(do_you_shoot_first, name):
 
         print()
 
+
+
     if player.health == 0:
         print("GAME OVER")
-        exit()
+        time.sleep(1)
+        main()
 
 
     else:
 
+        player.health = 1000
+
         # A 70 percent chance for the enemy to drop something random out of their inventory
         # then if not then they will drop an item
+
+
+        if name == "Beast":
+            return
 
         item_drop = 0
 
@@ -181,6 +197,28 @@ def encounter(name):
 
     if choice == "2":
         battle(True, name)
+
+
+def boss_fight():
+
+    print()
+    print("You walk in to chamber. You here the laughs of a great voice echoing on the walls")
+    time.sleep(0.5)
+
+
+
+    print("'Congratulations' Says a booming voice")
+    time.sleep(0.5)
+
+    print("You have passed my test. But now you die")
+
+
+    battle(False,"Beast")
+
+    
+    print("'Arrrrr'")
+    time.sleep(1)
+    
 
 
 def list_weapons(inv):
@@ -289,14 +327,14 @@ def shop():
 
     while True:
 
-        print("1: Buy Guns\n2: Buy Ammo\n3: Sell\n4: Exit\n")
+        print("1: Buy Guns\n2: Buy Ammo\n3: Exit\n")
 
         while True:
             try:
 
                 choice = int(input("> "))
 
-                if choice in (1, 2, 3, 4):
+                if choice in (1, 2, 3):
                     break
 
                 else:
@@ -461,24 +499,23 @@ def shop():
 
 
         elif choice == 3:
-            print("Sell")
-
-        elif choice == 4:
-            print("Exit")
             return
 
 
 def menu():
-    while True:
 
-        print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart\n5: Exit")
+    level = 0
+
+    while True:
+        
+        print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart")
 
         while True:
             try:
 
                 choice = int(input("> "))
 
-                if choice in (1, 2, 3, 4, 5):
+                if choice in (1, 2, 3):
                     break
 
                 else:
@@ -490,17 +527,23 @@ def menu():
         match choice:
 
             case 1:
+                
+                
+                if level == 10:
+
+                    boss_fight()
 
                 encounter(0)
+                level += 1
+
+            #case 2:
+             #   print("Inventory")
 
             case 2:
-                print("Inventory")
-
-            case 3:
                 shop()
 
-            case 4:
-                print("Exit")
+            case 3:
+                main()
 
 
 class Player:
@@ -596,17 +639,10 @@ class Item:
 
 
 def main():
-    print("Welcome to the game of something hopefully cool")
 
-    # Just some testing stuff. Temporary
+    start()
 
-    player.inv.append(all_weapons.pop(0))
-    # player.inv.append(all_weapons.pop(3))
-    # player.inv.append(all_weapons.pop(3))
-
-    collect_weapon(all_weapons[0])
-
-    player.ammo_inv["assault"] = 15
+    boss_fight()
 
     menu()
 
@@ -671,25 +707,28 @@ weapon_data = [
         "G11", 15, 33, 65, 2100, 10, "assault", 2600,
         "As you {verb} the G11, you feel the spirit of West Germany. Experimental, desperate, and ahead of its time.",
     ),
-    ("NTW-20", 600, 1, 95, 30, 10, "sniper", 6000,
-     "You {verb} the NTW-20. A monster of a gun. You can barely handle it. You feel bad for its future victims",
+    (   "NTW-20", 600, 1, 95, 30, 10, "sniper", 6000,
+        "You {verb} the NTW-20. A monster of a gun. You can barely handle it. You feel bad for its future victims",
      ),
     (
         "Remington 870", 70, 8, 50, 200, 1, "shotgun", 400,
         "You {verb} the Remington 870. A classic pump action shotgun. Reliable, and unbreakable. Maybe a bit simple."
 
     ),
-    ("Zip 22", 3, 10, 40, 300, 10, "pistol", 10000,
-     "As you {verb} the Zip 22, you feel the power of the beast. 10 Grand, worth every penny."
+    (   "Zip 22", 3, 10, 40, 300, 10, "pistol", 10000,
+        "As you {verb} the Zip 22, you feel the power of the beast. 10 Grand, worth every penny."
 
      ),
-    ("Famas F1", 32, 25, 65, 1100, 2, "assault", 1100,
-     "You {verb} the Famas F1. The French bullpup. It looks weird, and shoots weird, but effective nonetheless."
+    (   "Famas F1", 32, 25, 65, 1100, 2, "assault", 1100,
+        "You {verb} the Famas F1. The French bullpup. It looks weird, and shoots weird, but effective nonetheless."
 
      ),
-    ("M4A1", 33, 30, 80, 900, 2, "assault", 900,
-     "'The most boring gun in the world', you think as you {verb} the M4A1."
+    (   "M4A1", 33, 30, 80, 900, 2, "assault", 900,
+        "'The most boring gun in the world', you think as you {verb} the M4A1."
      ),
+    (  "Remington 700", 130, 7, 90 , 150 , 5, "sniper", 1200,
+        "The Remington 700. A classic sniper rifle. You {verb} it and check the magazine"
+    )
 
 ]
 
