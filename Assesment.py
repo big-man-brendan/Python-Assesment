@@ -3,12 +3,17 @@ import time
 
 
 def start():
-
+    # the text that plays at the start. and give you a weapon
+    print()
     print("You wake up. Your in a cave, and remember nothing.")
     time.sleep(0.2)
     print("Theres dust in your eye's, and you can barely make out something")
+
+    print()
     time.sleep(0.2)
     print("A Kalashnikov AK-47")
+    print()
+
     time.sleep(0.5)
     print("Fully loaded and ready to go")
     time.sleep(0.2)
@@ -17,14 +22,26 @@ def start():
     print("Then you remember. The man who killed your family")
     time.sleep(0.2)
     print("You have to chase him")
+    print()
 
-    player.inv.append(all_weapons.pop(0))
+    collect_weapon(all_weapons.pop(0))
+
+
+def help_me():
+    # tell people how to play the game if they want to
+    print()
+    print("During a battle, select your weapon to use.")
+    print("In the shop, buy guns and ammo to use during battles")
+    print("(tip, dont get stuck without any ammo during a battle)")
+    print()
 
 
 def battle(do_you_shoot_first, name):
     # Sets the enemy for ease of use. Will change to be random based on things later
 
-    enemy = Enemy(name, random.randint(700, 1400), [random.choice(all_weapons)])
+    player.health = 1000
+
+    enemy = Enemy(name, random.randint(600, 900), [all_weapons.pop(random.randrange(len(all_weapons)))])
 
     # Just loop until someone dies
     while player.health > 0 and enemy.health > 0:
@@ -37,7 +54,7 @@ def battle(do_you_shoot_first, name):
 
             list_weapons(player.inv)
 
-            while not False:
+            while True:
 
                 try:
 
@@ -106,22 +123,22 @@ def battle(do_you_shoot_first, name):
 
         print()
 
-
-
     if player.health == 0:
         print("GAME OVER")
         time.sleep(1)
+        reset()
         main()
 
 
     else:
 
-        player.health = 1000
+        
 
         # A 70 percent chance for the enemy to drop something random out of their inventory
         # then if not then they will drop an item
 
 
+        #Handle the boss
         if name == "Beast":
             return
 
@@ -129,8 +146,6 @@ def battle(do_you_shoot_first, name):
 
         if random.randint(1, 10) > 3:
             item_drop = random.choice(enemy.weapons)
-
-        if item_drop:
             print(f"The {enemy.name} dropped an {item_drop.name}")
 
             collect_weapon(item_drop)
@@ -141,8 +156,16 @@ def battle(do_you_shoot_first, name):
             item_drop = random.choice(heaps_of_items)
 
             print(f"The {enemy.name} dropped a {item_drop.name}. Its worth ${item_drop.value} bucks")
+            player.money += item_drop.value
 
         # make the enemy drop some ammo
+
+        # make the lad drop some cash money
+
+        money = random.randint(500, 1500)
+
+        print(f"You take ${money} from the {name}'s pocket")
+        player.money += money
 
 
 def encounter(name):
@@ -201,27 +224,31 @@ def encounter(name):
 
 def boss_fight():
 
+
+    #Do the boss fight. mostly just a bunch of text.
     print()
     print("You walk in to chamber. You here the laughs of a great voice echoing on the walls")
     time.sleep(0.5)
-
-
 
     print("'Congratulations' Says a booming voice")
     time.sleep(0.5)
 
     print("You have passed my test. But now you die")
 
+    battle(False, "Beast")
 
-    battle(False,"Beast")
-
-    
     print("'Arrrrr'")
     time.sleep(1)
-    
+
+    print("You beat the boss. And kick his corpse across the pavement")
+    print()
+    print()
+    print("                     YOU WIN")
 
 
 def list_weapons(inv):
+
+    #Lits the weapons out nicely. and like tells you if your gonna reload
     print("   Weapon | Ammo | Total Ammo\n")
 
     for i in range(len(inv)):
@@ -231,7 +258,7 @@ def list_weapons(inv):
         print(f"{player.ammo_inv[weapon.bullet]}", end="")
 
         if weapon.ammo == 0:
-            print("  (RELOAD)")
+            print("  (RELOAD)", end = '')
 
         print()
 
@@ -240,6 +267,7 @@ def collect_weapon(weapon):
     weapon.pick_up()
 
     # You can only have 3 weapons so you have to drop one
+    #Lets you pick which one to drop. lowkey a smart system
 
     if len(player.inv) >= 3:
 
@@ -294,7 +322,11 @@ def collect_weapon(weapon):
 
 
 def shop():
+
+
     def buy_ammo(type, amount, price):
+
+        #A function to buy ammo so i dont have to repeat the code over and over
 
         if player.money >= price:
 
@@ -321,9 +353,13 @@ def shop():
 
                 player.ammo_inv[type] += amount
 
+
+
     print("Welcome to Matthew Chung's shop")
 
     print("What do you want to do:\n")
+
+    #Lets you pick options
 
     while True:
 
@@ -345,10 +381,14 @@ def shop():
 
         print()
 
+        #Lists 5 weapons and lets you pick one to buy if you have money
+
         if choice == 1:
 
             products = []
             products_index = []
+
+            #Adds weapons to the list that we are going to use. and stores the index as well so we know which one it is
 
             for _ in range(5):
                 index = random.randint(0, len(all_weapons) - 1)
@@ -390,6 +430,8 @@ def shop():
 
                 weapon = products[choice - 1]
 
+                #lets you pick one
+
                 print()
                 print(f"You have ${player.money}.00")
                 print(f"This one cost ${weapon.value}")
@@ -427,14 +469,14 @@ def shop():
                         pass
 
 
-
+        #Lets you buy and chose which ammo to buy.
 
         elif choice == 2:
             print("Buy Ammo")
 
             print("What do you want to buy do you want to buy:")
             print()
-            print("       Ammo | Your Ammo")
+            print("  Ammo | Your Ammo")
 
             print(f"1: Assault: {player.ammo_inv['assault']}")
             print(f"2: SMG: {player.ammo_inv['smg']}")
@@ -461,6 +503,8 @@ def shop():
             print(f"You have ${player.money}.00")
 
             print("You can get ", end='')
+
+            #Depends on which one you pick it will have a different outcome
 
             match choice:
 
@@ -503,19 +547,20 @@ def shop():
 
 
 def menu():
-
     level = 0
 
+    #Just a simple menu
+
     while True:
-        
-        print("1: Proceed forward\n2: Check Inventory\n3: Shop\n4: Restart")
+        print()
+        print("1: Proceed forward\n2: Shop\n3: Help\n4: Restart Game")
 
         while True:
             try:
 
                 choice = int(input("> "))
 
-                if choice in (1, 2, 3):
+                if choice in (1, 2, 3, 4):
                     break
 
                 else:
@@ -527,22 +572,22 @@ def menu():
         match choice:
 
             case 1:
-                
-                
-                if level == 10:
 
+                #Once you do 10 encounters, its the boss fight
+                if level == 10:
                     boss_fight()
 
                 encounter(0)
                 level += 1
 
-            #case 2:
-             #   print("Inventory")
-
             case 2:
                 shop()
 
             case 3:
+                help_me()
+
+            case 4:
+                reset()
                 main()
 
 
@@ -639,12 +684,24 @@ class Item:
 
 
 def main():
-
     start()
 
-    boss_fight()
-
     menu()
+
+
+def reset():
+
+    player.health = 1000
+    player.ammo_inv = {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10}
+    player.money = 100
+    player.inv = []
+    
+    all_weapons.clear()
+
+    for i in weapon_data:
+        all_weapons.append(Weapon(*i, i[2]))
+
+
 
 
 # just a list for a bunch of random items to drop
@@ -652,7 +709,7 @@ heaps_of_items = [
     Item("Broken gun", 40),
     Item("Spoon", 5),
     Item("Rusty bolt", 2),
-    Item("Roll of duck tape", 15),
+    Item("Roll of duct tape", 15),
     Item("Empty bottle", 1),
     Item("Crumpled note", 2),
     Item("Old phone", 25),
@@ -675,7 +732,7 @@ heaps_of_items = [
 ]
 
 # Makes the player with the player class
-player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10}, 10000)
+player = Player("Player", 1000, [], {"assault": 100, "smg": 100, "shotgun": 20, "pistol": 60, "sniper": 10}, 100)
 
 # Sets up all the weapons. Each one has a name, damage, and so on.
 # The {verb} in the pick up message gets replaced randomly inside the class each time guns are picked up
@@ -707,28 +764,28 @@ weapon_data = [
         "G11", 15, 33, 65, 2100, 10, "assault", 2600,
         "As you {verb} the G11, you feel the spirit of West Germany. Experimental, desperate, and ahead of its time.",
     ),
-    (   "NTW-20", 600, 1, 95, 30, 10, "sniper", 6000,
-        "You {verb} the NTW-20. A monster of a gun. You can barely handle it. You feel bad for its future victims",
+    ("NTW-20", 600, 1, 95, 30, 10, "sniper", 6000,
+     "You {verb} the NTW-20. A monster of a gun. You can barely handle it. You feel bad for its future victims",
      ),
     (
         "Remington 870", 70, 8, 50, 200, 1, "shotgun", 400,
         "You {verb} the Remington 870. A classic pump action shotgun. Reliable, and unbreakable. Maybe a bit simple."
 
     ),
-    (   "Zip 22", 3, 10, 40, 300, 10, "pistol", 10000,
-        "As you {verb} the Zip 22, you feel the power of the beast. 10 Grand, worth every penny."
+    ("Zip 22", 3, 10, 40, 300, 10, "pistol", 10000,
+     "As you {verb} the Zip 22, you feel the power of the beast. 10 Grand, worth every penny."
 
      ),
-    (   "Famas F1", 32, 25, 65, 1100, 2, "assault", 1100,
-        "You {verb} the Famas F1. The French bullpup. It looks weird, and shoots weird, but effective nonetheless."
+    ("Famas F1", 32, 25, 65, 1100, 2, "assault", 1100,
+     "You {verb} the Famas F1. The French bullpup. It looks weird, and shoots weird, but effective nonetheless."
 
      ),
-    (   "M4A1", 33, 30, 80, 900, 2, "assault", 900,
-        "'The most boring gun in the world', you think as you {verb} the M4A1."
+    ("M4A1", 33, 30, 80, 900, 2, "assault", 900,
+     "'The most boring gun in the world', you think as you {verb} the M4A1."
      ),
-    (  "Remington 700", 130, 7, 90 , 150 , 5, "sniper", 1200,
-        "The Remington 700. A classic sniper rifle. You {verb} it and check the magazine"
-    )
+    ("Remington 700", 130, 7, 90, 150, 5, "sniper", 1200,
+     "The Remington 700. A classic sniper rifle. You {verb} it and check the magazine"
+     )
 
 ]
 
@@ -740,8 +797,3 @@ for i in weapon_data:
 main()
 
 print("Finished")
-
-# we have it like this
-# [{ak_47_class:ammo_amount},{aug_a3_class:ammo_amount}]
-# we need it like this
-# [
